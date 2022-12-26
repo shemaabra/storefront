@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db.models import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
@@ -44,6 +44,7 @@ class CollectionAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    actions = ["clear_inventory"]
     list_display = ["title", "description", "price", "inventory_status", "collection"]
     list_editable = ["price"]
     ordering = ["title"]
@@ -58,6 +59,15 @@ class ProductAdmin(admin.ModelAdmin):
         if Product.inventory < 10:
             return "Low"
         return "Ok"
+
+    @admin.action(description="Clear Inventory")
+    def clear_inventory(self, request, queryset):
+        update_count = queryset.update(inventory=0)
+        self.message_user(
+            request, 
+            f'{update_count} Product Were Successfull Updated!',
+            messages.ERROR
+        )
 
 
 @admin.register(Promotion)
