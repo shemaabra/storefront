@@ -12,6 +12,18 @@ from .models import (
 )
 
 
+class InventoryFilter(admin.SimpleListFilter):
+    title = "inventory"
+    parameter_name = "inventory"
+
+    def lookups(self, request, model_admin):
+        return [("<10", "Low")]
+
+    def queryset(self, request, queryset):
+        if self.value() == "<10":
+            return queryset.filter(inventory__lt=10)
+
+
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ["title", "product_count"]
@@ -37,6 +49,8 @@ class ProductAdmin(admin.ModelAdmin):
     ordering = ["title"]
     list_per_page = 10
     list_select_related = ["collection"]
+    search_fields = ["title", "price", "inventory_status"]
+    list_filter = ["collection", "last_update", InventoryFilter]
 
     @admin.display(ordering="inventory")
     # This decorator Function Allow Sorting Mechanism in This automated column
