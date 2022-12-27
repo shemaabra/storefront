@@ -1,7 +1,9 @@
 from django.contrib import admin, messages
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models import Count
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
+from tags.models import Tag, TaggedItem
 from .models import (
     Collection,
     Product,
@@ -41,6 +43,8 @@ class CollectionAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(product_count=Count("product"))
+
+
 
 
 @admin.register(Product)
