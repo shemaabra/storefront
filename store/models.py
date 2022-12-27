@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields import DateTimeField
+from django.core.validators import MinValueValidator
 
 # Create your models here.
 
@@ -25,12 +26,13 @@ class Collection(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    slug = models.CharField(max_length=255, default="")
+    description = models.TextField(null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(1)])
     inventory = models.IntegerField()
     last_update = DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
-    Promotions = models.ManyToManyField(Promotion)
+    Promotions = models.ManyToManyField(Promotion, blank=True)
 
     def __str__(self) -> str:
         return self.title
