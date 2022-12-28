@@ -3,16 +3,17 @@ from decimal import Decimal
 from .models import Product, Collection
 
 
-class CollectionSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=255)
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = ['id', 'title']
 
-class ProductSeriliarizer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=255)
-    price = serializers.DecimalField(max_digits=6, decimal_places=2)
+class ProductSeriliarizer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'price', 'price_with_tax', 'collection']
+
     price_with_tax = serializers.SerializerMethodField(method_name='calculate_tax')
-    collection = CollectionSerializer()
 
     def calculate_tax(self, product: Product):
         return product.price * Decimal(1.1)
