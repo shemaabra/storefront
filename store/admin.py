@@ -29,7 +29,7 @@ class InventoryFilter(admin.SimpleListFilter):
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ["title", "product_count"]
-    search_fields = ['title']
+    search_fields = ["title"]
 
     # overide method of queryset
     @admin.display(ordering="product_count")
@@ -45,14 +45,10 @@ class CollectionAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate(product_count=Count("product"))
 
 
-
-
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    prepopulated_fields = {
-        'slug': ['title']
-    }
-    autocomplete_fields = ['collection']
+    prepopulated_fields = {"slug": ["title"]}
+    autocomplete_fields = ["collection"]
     actions = ["clear_inventory"]
     list_display = ["title", "description", "price", "inventory_status", "collection"]
     list_editable = ["price"]
@@ -73,9 +69,7 @@ class ProductAdmin(admin.ModelAdmin):
     def clear_inventory(self, request, queryset):
         update_count = queryset.update(inventory=0)
         self.message_user(
-            request, 
-            f'{update_count} Product Were Successfull Updated!',
-            messages.ERROR
+            request, f"{update_count} Product Were Successfull Updated!", messages.ERROR
         )
 
 
@@ -113,10 +107,8 @@ class CustomerAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate(order_count=Count("order"))
 
 
-
-
 class OrderItermInline(admin.TabularInline):
-    autocomplete_fields = ['product']
+    autocomplete_fields = ["product"]
     min_num = 1
     max_num = 10
     model = OrderItem
@@ -125,7 +117,7 @@ class OrderItermInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['customer']
+    autocomplete_fields = ["customer"]
     inlines = [OrderItermInline]
     list_display = ["id", "placed_at", "payment_status", "customer"]
     list_per_page = 10
