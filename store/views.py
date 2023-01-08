@@ -59,25 +59,48 @@ class CollectionList(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-@api_view(["GET", "PUT", "DELETE"])
-def collection_detail(request, pk):
-    queryset = get_object_or_404(Collection, pk=pk)
-    if request.method == "GET":
+
+
+class CollectionDetail(APIView):
+    def get(self, request, pk):
+        queryset = get_object_or_404(Collection, pk=pk)
         serializer = CollectionSerializer(queryset, many=False)
         return Response(serializer.data)
-
-    elif request.method == "PUT":
+    
+    def put(self, request, pk):
+        queryset = get_object_or_404(Collection, pk=pk)
         serializer = CollectionSerializer(queryset, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    elif request.method == "DELETE":
+    
+    def delete(self, request, pk):
+        queryset = get_object_or_404(Collection, pk=pk)
         if queryset.product_set.count() > 0:
-            return Response(
-                {
-                    "error": "Collection cannot be deleted because It is associated with Product."
-                },
-                status=status.HTTP_405_METHOD_NOT_ALLOWED,
-            )
+            return Response({"error": "Collection cannot be deleted because It is associated with Product."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# @api_view(["GET", "PUT", "DELETE"])
+# def collection_detail(request, pk):
+#     queryset = get_object_or_404(Collection, pk=pk)
+#     if request.method == "GET":
+#         serializer = CollectionSerializer(queryset, many=False)
+#         return Response(serializer.data)
+
+#     elif request.method == "PUT":
+#         serializer = CollectionSerializer(queryset, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     elif request.method == "DELETE":
+#         if queryset.product_set.count() > 0:
+#             return Response(
+#                 {
+#                     "error": "Collection cannot be deleted because It is associated with Product."
+#                 },
+#                 status=status.HTTP_405_METHOD_NOT_ALLOWED,
+#             )
+#         queryset.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
