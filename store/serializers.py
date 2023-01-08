@@ -9,7 +9,7 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ["id", "title"]
 
 
-class ProductSeriliarizer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
