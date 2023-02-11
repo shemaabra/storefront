@@ -7,6 +7,7 @@ from . import views
 router = DefaultRouter()
 router.register("products", views.ProductViewSet)
 router.register("collections", views.CollectionViewSet)
+router.register("review", views.ReviewViewSet)
 # pprint(router.urls)
 
 
