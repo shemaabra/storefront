@@ -9,6 +9,7 @@ django-debug-toolbar = "*"
 black = "*"
 djangorestframework = "*"
 drf-nested-routers = "*"
+django-filter = "*"
 
 [dev-packages]
 

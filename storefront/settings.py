@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "store_custom",
     # Installed Apps
     "debug_toolbar",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
