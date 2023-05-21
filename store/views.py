@@ -6,14 +6,19 @@ from .filters import ProductFilter
 from rest_framework import status
 from .models import Product, Collection, OrderItem, Review
 from .serializers import ProductSerializer, CollectionSerializer, ReviewSerializers
+from rest_framework.filters import SearchFilter, OrderingFilter
+# from rest_framework.pagination import PageNumberPagination
 
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # filterset_fields = ["collection_id"]
     filterset_class = ProductFilter
+    # pagination_class = PageNumberPagination
+    search_fields=['title', 'description']
+    ordering_fields = ['price', 'last_update']
 
     def get_serializer_context(self):
         return {"request": self.request}
