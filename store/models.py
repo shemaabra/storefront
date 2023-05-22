@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 from django.db.models.fields import DateTimeField
 from django.core.validators import MinValueValidator
+from uuid import uuid4
 
 # Create your models here.
 
@@ -112,14 +113,18 @@ class Address(models.Model):
     )
 
 
-class Cart(models.Model):
+class Cart(models.Model): 
+    id = models.UUIDField(primary_key=True, default=uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=CASCADE)
     quantity = models.PositiveSmallIntegerField()
+
+    class Meta:
+        unique_together = [['cart', 'product']]
 
 
 class Review(models.Model):
