@@ -11,6 +11,8 @@ from .models import (
     OrderItem,
     Promotion,
     Customer,
+    Cart,
+    CartItem,
 )
 
 
@@ -128,4 +130,14 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
     pass
