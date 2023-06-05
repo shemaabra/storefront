@@ -3,14 +3,20 @@ from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from .filters import ProductFilter
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin
+from rest_framework.mixins import (
+    CreateModelMixin,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+)
 from rest_framework import status
-from .models import Product, Collection, OrderItem, Review, Cart
+from .models import Product, Collection, OrderItem, Review, Cart, CartItem
 from .serializers import (
     ProductSerializer,
     CollectionSerializer,
     ReviewSerializers,
     CartSerializer,
+    CartItemSerializer,
+    AddCartItemSerializer
 )
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -67,7 +73,22 @@ class ReviewViewSet(ModelViewSet):
 
 
 class CartViewSet(
-    CreateModelMixin, RetrieveModelMixin, GenericViewSet
+    CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet
 ):  # Here We use Custome View Set
-    queryset = Cart.objects.prefetch_related('items__product').all()
+    queryset = Cart.objects.prefetch_related("items__product").all()
     serializer_class = CartSerializer
+
+
+class CartItemViewSet(ModelViewSet):
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return AddCartItemSerializer
+        return CartItemSerializer
+    
+    def get_serializer_context(self):
+        return {'cart_id': self.kwargs['cart_pk']}
+
+    def get_queryset(self):
+        return CartItem.objects.filter(cart_id=self.kwargs["cart_pk"]).select_related(
+            "product"
+        )
