@@ -121,9 +121,7 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=CASCADE)
-    quantity = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1)]
-    )
+    quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
     class Meta:
         unique_together = [["cart", "product"]]

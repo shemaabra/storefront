@@ -16,7 +16,8 @@ from .serializers import (
     ReviewSerializers,
     CartSerializer,
     CartItemSerializer,
-    AddCartItemSerializer
+    AddCartItemSerializer,
+    UpdateCartItemSerializer,
 )
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -80,13 +81,16 @@ class CartViewSet(
 
 
 class CartItemViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return AddCartItemSerializer
+        if self.request.method == "PATCH":
+            return UpdateCartItemSerializer
         return CartItemSerializer
-    
+
     def get_serializer_context(self):
-        return {'cart_id': self.kwargs['cart_pk']}
+        return {"cart_id": self.kwargs["cart_pk"]}
 
     def get_queryset(self):
         return CartItem.objects.filter(cart_id=self.kwargs["cart_pk"]).select_related(
