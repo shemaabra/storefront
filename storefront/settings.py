@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
+    
     # Local Apps
     "playground",
     "store",
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     # Installed Apps
     "debug_toolbar",
     "django_filters",
+    "rest_framework",
+    "djoser",
 ]
 
 MIDDLEWARE = [
@@ -140,7 +142,15 @@ REST_FRAMEWORK = {
     "COERCE_DECIMAL_TO_STRING": False,
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 5,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
 
 AUTH_USER_MODEL = "core.User"
