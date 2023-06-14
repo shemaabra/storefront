@@ -24,7 +24,7 @@ from .serializers import (
     CustomerSerializer,
 )
 from rest_framework.filters import SearchFilter, OrderingFilter
-from .permissions import IsAdminOrReadOnly, FullDjangoModelPermissions
+from .permissions import IsAdminOrReadOnly, FullDjangoModelPermissions, ViewCustomerHistoryPermission
 # from rest_framework.pagination import PageNumberPagination
 
 
@@ -114,6 +114,10 @@ class CustomerViewSet(ModelViewSet):
     #     if self.request.method == 'GET':
     #         return [AllowAny()]
     #     return [IsAuthenticated()]
+    @action(detail=True, permission_classes=[ViewCustomerHistoryPermission])
+    def history(self, request,pk):
+        return Response('ok')
+
         
     @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
