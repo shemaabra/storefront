@@ -10,7 +10,7 @@ from rest_framework.mixins import (
     UpdateModelMixin,
 )
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoModelPermissions, DjangoModelPermissions, IsAdminUser
 from rest_framework import status
 from .models import Product, Collection, OrderItem, Review, Cart, CartItem, Customer
 from .serializers import (
@@ -24,8 +24,7 @@ from .serializers import (
     CustomerSerializer,
 )
 from rest_framework.filters import SearchFilter, OrderingFilter
-from .permissions import IsAdminOrReadOnly
-
+from .permissions import IsAdminOrReadOnly, FullDjangoModelPermissions
 # from rest_framework.pagination import PageNumberPagination
 
 
