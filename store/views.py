@@ -12,7 +12,7 @@ from rest_framework.mixins import (
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny, DjangoModelPermissions, DjangoModelPermissions, IsAdminUser
 from rest_framework import status
-from .models import Product, Collection, OrderItem, Review, Cart, CartItem, Customer
+from .models import Product, Collection, OrderItem, Review, Cart, CartItem, Customer, Order
 from .serializers import (
     ProductSerializer,
     CollectionSerializer,
@@ -22,6 +22,7 @@ from .serializers import (
     AddCartItemSerializer,
     UpdateCartItemSerializer,
     CustomerSerializer,
+    OrderSerializer
 )
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .permissions import IsAdminOrReadOnly, FullDjangoModelPermissions, ViewCustomerHistoryPermission
@@ -131,4 +132,9 @@ class CustomerViewSet(ModelViewSet):
             serializer.save()
             return Response(serializer.data)
 
- 
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
